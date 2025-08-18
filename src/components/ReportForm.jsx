@@ -1,20 +1,11 @@
 import React, { useState } from 'react'
 import { AlertTriangle, Upload, Calendar, MapPin, FileText, CheckCircle } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { supabase } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext.jsx'
+import { supabase } from '../lib/supabase.js'
 
-interface FormData {
-  category: 'fraud' | 'phishing' | 'harassment' | 'deepfake'
-  title: string
-  description: string
-  location: string
-  incidentDate: string
-  lookupEntities: Array<{ type: 'email' | 'phone' | 'website'; value: string }>
-}
-
-const ReportForm: React.FC = () => {
+const ReportForm = () => {
   const { user, createAnonymousUser } = useAuth()
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     category: 'fraud',
     title: '',
     description: '',
@@ -22,13 +13,13 @@ const ReportForm: React.FC = () => {
     incidentDate: '',
     lookupEntities: [],
   })
-  const [file, setFile] = useState<File | null>(null)
+  const [file, setFile] = useState(null)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [referenceId, setReferenceId] = useState('')
   const [error, setError] = useState('')
   const [isAnonymous, setIsAnonymous] = useState(false)
-  const [entityInput, setEntityInput] = useState({ type: 'email' as const, value: '' })
+  const [entityInput, setEntityInput] = useState({ type: 'email', value: '' })
 
   const categories = [
     { value: 'fraud', label: 'Financial Fraud' },
@@ -37,7 +28,7 @@ const ReportForm: React.FC = () => {
     { value: 'deepfake', label: 'Deepfake' },
   ]
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleInputChange = (e) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
   }
@@ -52,14 +43,14 @@ const ReportForm: React.FC = () => {
     }
   }
 
-  const removeLookupEntity = (index: number) => {
+  const removeLookupEntity = (index) => {
     setFormData(prev => ({
       ...prev,
       lookupEntities: prev.lookupEntities.filter((_, i) => i !== index),
     }))
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e) => {
     const selectedFile = e.target.files?.[0]
     if (selectedFile) {
       // Check file size (max 10MB)
@@ -72,7 +63,7 @@ const ReportForm: React.FC = () => {
     }
   }
 
-  const uploadFile = async (reportId: string): Promise<string | null> => {
+  const uploadFile = async (reportId) => {
     if (!file) return null
 
     const fileExt = file.name.split('.').pop()
@@ -95,7 +86,7 @@ const ReportForm: React.FC = () => {
     return publicUrl
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
@@ -131,7 +122,7 @@ const ReportForm: React.FC = () => {
 
       if (reportError) throw reportError
 
-      let fileUrl: string | null = null
+      let fileUrl = null
 
       // Upload file if provided
       if (file) {
@@ -174,7 +165,7 @@ const ReportForm: React.FC = () => {
 
       setReferenceId(report.reference_id)
       setSuccess(true)
-    } catch (error: any) {
+    } catch (error) {
       setError(error.message || 'An error occurred while submitting the report')
     } finally {
       setLoading(false)
@@ -354,7 +345,7 @@ const ReportForm: React.FC = () => {
               <div className="flex gap-2 mb-2">
                 <select
                   value={entityInput.type}
-                  onChange={(e) => setEntityInput(prev => ({ ...prev, type: e.target.value as any }))}
+                  onChange={(e) => setEntityInput(prev => ({ ...prev, type: e.target.value }))}
                   className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="email">Email</option>

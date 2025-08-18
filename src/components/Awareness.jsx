@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { BookOpen, Plus, Edit2, Trash2, Eye, Calendar, User } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
-import { supabase } from '../lib/supabase'
-import type { Database } from '../lib/supabase'
+import { useAuth } from '../contexts/AuthContext.jsx'
+import { supabase } from '../lib/supabase.js'
 
-type Blog = Database['public']['Tables']['blogs']['Row']
-
-const Awareness: React.FC = () => {
+const Awareness = () => {
   const { user } = useAuth()
-  const [blogs, setBlogs] = useState<Blog[]>([])
+  const [blogs, setBlogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
-  const [editingBlog, setEditingBlog] = useState<Blog | null>(null)
+  const [editingBlog, setEditingBlog] = useState(null)
   const [formData, setFormData] = useState({
     title: '',
     content: '',
@@ -48,7 +45,7 @@ const Awareness: React.FC = () => {
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     if (!user) return
 
@@ -80,7 +77,7 @@ const Awareness: React.FC = () => {
     }
   }
 
-  const handleEdit = (blog: Blog) => {
+  const handleEdit = (blog) => {
     setEditingBlog(blog)
     setFormData({
       title: blog.title,
@@ -91,7 +88,7 @@ const Awareness: React.FC = () => {
     setShowForm(true)
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id) => {
     if (!confirm('Are you sure you want to delete this article?')) return
 
     try {
@@ -107,7 +104,7 @@ const Awareness: React.FC = () => {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'long',
@@ -115,7 +112,7 @@ const Awareness: React.FC = () => {
     })
   }
 
-  const truncateContent = (content: string, maxLength: number = 200) => {
+  const truncateContent = (content, maxLength = 200) => {
     if (content.length <= maxLength) return content
     return content.substring(0, maxLength) + '...'
   }

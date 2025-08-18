@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Shield, Clock, MapPin, AlertTriangle, ExternalLink } from 'lucide-react'
-import { supabase } from '../lib/supabase'
-import type { Database } from '../lib/supabase'
+import { supabase } from '../lib/supabase.js'
 
-type Report = Database['public']['Tables']['reports']['Row']
-
-const ScamWall: React.FC = () => {
-  const [reports, setReports] = useState<Report[]>([])
+const ScamWall = () => {
+  const [reports, setReports] = useState([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<string>('all')
+  const [filter, setFilter] = useState('all')
 
   const categoryColors = {
     fraud: 'bg-red-100 text-red-800 border-red-200',
@@ -64,7 +61,7 @@ const ScamWall: React.FC = () => {
           table: 'reports',
         },
         (payload) => {
-          const newReport = payload.new as Report
+          const newReport = payload.new
           if (filter === 'all' || newReport.category === filter) {
             setReports(prev => [newReport, ...prev.slice(0, 49)])
           }
@@ -77,7 +74,7 @@ const ScamWall: React.FC = () => {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString)
     return date.toLocaleDateString('en-US', {
       year: 'numeric',
@@ -88,7 +85,7 @@ const ScamWall: React.FC = () => {
     })
   }
 
-  const truncateText = (text: string, maxLength: number = 150) => {
+  const truncateText = (text, maxLength = 150) => {
     if (text.length <= maxLength) return text
     return text.substring(0, maxLength) + '...'
   }

@@ -1,7 +1,7 @@
 # Cyber-Crime-Report-Awareness 
 # 🛡️ Cybercrime Report & Awareness Portal  
 
-A full-stack web application that allows users to **report cybercrimes**, raise awareness, and explore preventive tips. Built with **React (Vite + JSX + TailwindCSS)** for the frontend and **Firebase (Auth, Firestore, Storage, Hosting)** for the backend.  
+A full-stack web application that allows users to **report cybercrimes**, raise awareness, and explore preventive tips. Built with **React (Vite + JSX + TailwindCSS)** for the frontend and **Supabase (Auth, Database, Storage)** for the backend.  
 
 ---
 
@@ -35,7 +35,7 @@ A full-stack web application that allows users to **report cybercrimes**, raise 
 
 ---
 
-## 🗄️ Database Schema (Firestore Collections)  
+## 🗄️ Database Schema (PostgreSQL Tables)  
 
 - **users** → `{ id, email, name, is_anonymous, created_at }`  
 - **reports** → `{ id, user_id, category, title, description, location, file_url, reference_id, created_at }`  
@@ -50,11 +50,10 @@ A full-stack web application that allows users to **report cybercrimes**, raise 
 - React (Vite + JSX)  
 - Tailwind CSS  
 
-**Backend & Hosting:**  
-- Firebase Auth (Email, Google, Anonymous)  
-- Firestore Database (Realtime Updates)  
-- Firebase Storage (File Uploads)  
-- Firebase Hosting  
+**Backend & Database:**  
+- Supabase Auth (Email, Google, Anonymous)  
+- PostgreSQL Database (Realtime Updates)  
+- Supabase Storage (File Uploads)  
 
 ---
 

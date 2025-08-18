@@ -1,20 +1,15 @@
 import React, { useState } from 'react'
 import { Search, AlertTriangle, CheckCircle, ExternalLink } from 'lucide-react'
-import { supabase } from '../lib/supabase'
-import type { Database } from '../lib/supabase'
+import { supabase } from '../lib/supabase.js'
 
-type FraudLookup = Database['public']['Tables']['fraud_lookups']['Row'] & {
-  reports: Database['public']['Tables']['reports']['Row']
-}
-
-const FraudLookup: React.FC = () => {
+const FraudLookup = () => {
   const [searchQuery, setSearchQuery] = useState('')
-  const [searchType, setSearchType] = useState<'email' | 'phone' | 'website'>('email')
-  const [results, setResults] = useState<FraudLookup[]>([])
+  const [searchType, setSearchType] = useState('email')
+  const [results, setResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [searched, setSearched] = useState(false)
 
-  const handleSearch = async (e: React.FormEvent) => {
+  const handleSearch = async (e) => {
     e.preventDefault()
     if (!searchQuery.trim()) return
 
@@ -49,7 +44,7 @@ const FraudLookup: React.FC = () => {
     }
   }
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -114,7 +109,7 @@ const FraudLookup: React.FC = () => {
                       name="searchType"
                       value={option.value}
                       checked={searchType === option.value}
-                      onChange={(e) => setSearchType(e.target.value as any)}
+                      onChange={(e) => setSearchType(e.target.value)}
                       className="sr-only"
                     />
                     <span className="text-2xl mr-3">{option.icon}</span>
@@ -190,7 +185,7 @@ const FraudLookup: React.FC = () => {
                           <div className="flex items-center space-x-3 mt-2">
                             <span
                               className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                categoryColors[result.reports?.category as keyof typeof categoryColors]
+                                categoryColors[result.reports?.category]
                               }`}
                             >
                               {result.reports?.category?.toUpperCase()}

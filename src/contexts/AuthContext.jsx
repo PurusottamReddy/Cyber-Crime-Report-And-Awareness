@@ -1,19 +1,7 @@
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react'
-import { User, Session } from '@supabase/supabase-js'
-import { supabase } from '../lib/supabase'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { supabase } from '../lib/supabase.js'
 
-interface AuthContextType {
-  user: User | null
-  session: Session | null
-  loading: boolean
-  signUp: (email: string, password: string, name: string) => Promise<any>
-  signIn: (email: string, password: string) => Promise<any>
-  signInWithGoogle: () => Promise<any>
-  signOut: () => Promise<any>
-  createAnonymousUser: () => Promise<string | null>
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined)
+const AuthContext = createContext(undefined)
 
 export const useAuth = () => {
   const context = useContext(AuthContext)
@@ -23,13 +11,9 @@ export const useAuth = () => {
   return context
 }
 
-interface AuthProviderProps {
-  children: ReactNode
-}
-
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null)
-  const [session, setSession] = useState<Session | null>(null)
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null)
+  const [session, setSession] = useState(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -64,7 +48,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return () => subscription.unsubscribe()
   }, [])
 
-  const signUp = async (email: string, password: string, name: string) => {
+  const signUp = async (email, password, name) => {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -77,7 +61,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return { data, error }
   }
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email, password) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -97,7 +81,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return { error }
   }
 
-  const createAnonymousUser = async (): Promise<string | null> => {
+  const createAnonymousUser = async () => {
     try {
       // Generate a unique anonymous ID
       const anonymousId = `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
@@ -120,7 +104,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }
 
-  const value: AuthContextType = {
+  const value = {
     user,
     session,
     loading,

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { Shield, AlertTriangle, Users, Search, BookOpen, FileText } from 'lucide-react'
 
-const Home: React.FC = () => {
+const Home = () => {
   const features = [
     {
       icon: AlertTriangle,

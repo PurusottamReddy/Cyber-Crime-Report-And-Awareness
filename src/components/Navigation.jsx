@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Shield, Home, AlertTriangle, Search, BookOpen, LogIn, LogOut, User } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
-const Navigation: React.FC = () => {
+const Navigation = () => {
   const { user, signOut } = useAuth()
   const location = useLocation()
   const navigate = useNavigate()

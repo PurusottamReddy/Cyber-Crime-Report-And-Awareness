@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Shield, Mail, Lock, User, Chrome } from 'lucide-react'
-import { useAuth } from '../contexts/AuthContext'
+import { useAuth } from '../contexts/AuthContext.jsx'
 
-const Auth: React.FC = () => {
+const Auth = () => {
   const { user, signUp, signIn, signInWithGoogle, loading } = useAuth()
   const [isSignUp, setIsSignUp] = useState(false)
   const [email, setEmail] = useState('')
@@ -23,7 +23,7 @@ const Auth: React.FC = () => {
     )
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
     setAuthLoading(true)
     setError('')
@@ -38,7 +38,7 @@ const Auth: React.FC = () => {
         const { error } = await signIn(email, password)
         if (error) throw error
       }
-    } catch (error: any) {
+    } catch (error) {
       setError(error.message)
     } finally {
       setAuthLoading(false)
@@ -52,7 +52,7 @@ const Auth: React.FC = () => {
     try {
       const { error } = await signInWithGoogle()
       if (error) throw error
-    } catch (error: any) {
+    } catch (error) {
       setError(error.message)
     } finally {
       setAuthLoading(false)

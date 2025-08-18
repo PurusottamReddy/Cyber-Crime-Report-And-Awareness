@@ -1,13 +1,13 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
-import Navigation from './components/Navigation'
-import Home from './components/Home'
-import Auth from './components/Auth'
-import ReportForm from './components/ReportForm'
-import ScamWall from './components/ScamWall'
-import FraudLookup from './components/FraudLookup'
-import Awareness from './components/Awareness'
+import { AuthProvider } from './contexts/AuthContext.jsx'
+import Navigation from './components/Navigation.jsx'
+import Home from './components/Home.jsx'
+import Auth from './components/Auth.jsx'
+import ReportForm from './components/ReportForm.jsx'
+import ScamWall from './components/ScamWall.jsx'
+import FraudLookup from './components/FraudLookup.jsx'
+import Awareness from './components/Awareness.jsx'
 
 function App() {
   return (

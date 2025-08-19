@@ -47,7 +47,7 @@ A full-stack web application that allows users to **report cybercrimes**, raise 
 ## 🛠️ Tech Stack  
 
 **Frontend:**  
-- React (Vite + JSX)  
+- React (Vite)  
 - Tailwind CSS  
 
 **Backend & Database:**  
@@ -57,9 +57,3 @@ A full-stack web application that allows users to **report cybercrimes**, raise 
 
 ---
 
-## ⚙️ Installation & Setup  
-
-1. **Clone the repository**  
-   ```bash
-   git clone https://github.com/your-username/cybercrime-portal.git
-   cd cybercrime-portal

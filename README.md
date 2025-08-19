@@ -1,4 +1,4 @@
-# Cyber-Crime-Report-Awareness 
+
 # 🛡️ Cybercrime Report & Awareness Portal  
 
 A full-stack web application that allows users to **report cybercrimes**, raise awareness, and explore preventive tips. Built with **React (Vite + JSX + TailwindCSS)** for the frontend and **Supabase (Auth, Database, Storage)** for the backend.  

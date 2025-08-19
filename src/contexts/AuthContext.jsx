@@ -17,8 +17,11 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    console.log('AuthContext: Initializing auth state...')
+    
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('AuthContext: Initial session:', session?.user?.email || 'No session')
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
@@ -28,6 +31,7 @@ export const AuthProvider = ({ children }) => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log('AuthContext: Auth state change:', event, session?.user?.email || 'No user')
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
@@ -77,30 +81,71 @@ export const AuthProvider = ({ children }) => {
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    return { error }
+    try {
+      console.log('Signing out user...')
+      
+      // Clear any local storage that might be causing issues
+      localStorage.removeItem('supabase.auth.token')
+      
+      const { error } = await supabase.auth.signOut()
+      if (error) {
+        console.error('Sign out error:', error)
+        // Force clear the session even if Supabase signOut fails
+        setSession(null)
+        setUser(null)
+        return { error }
+      }
+      
+      console.log('User signed out successfully')
+      return { error: null }
+    } catch (err) {
+      console.error('Sign out exception:', err)
+      // Force clear the session even if there's an exception
+      setSession(null)
+      setUser(null)
+      return { error: err }
+    }
   }
 
+  // For anonymous reports we do NOT create a user record.
+  // The reports table allows null user_id and RLS permits anon inserts.
+  // Keep the function for API compatibility but make it a no-op.
   const createAnonymousUser = async () => {
-    try {
-      // Generate a unique anonymous ID
-      const anonymousId = `anon_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-      
-      const { data, error } = await supabase
-        .from('users')
-        .insert({
-          id: anonymousId,
-          name: 'Anonymous User',
-          is_anonymous: true,
-        })
-        .select()
-        .single()
+    return null
+  }
 
+  const updateProfile = async (profileData) => {
+    try {
+      const { data, error } = await supabase.auth.updateUser({
+        data: {
+          name: profileData.name,
+          phone: profileData.phone,
+          organization: profileData.organization,
+        }
+      })
+      
       if (error) throw error
-      return anonymousId
+      
+      // Update local user state
+      setUser(data.user)
+      
+      // Update user record in database
+      const { error: dbError } = await supabase
+        .from('users')
+        .upsert({
+          id: data.user.id,
+          email: data.user.email,
+          name: profileData.name,
+          phone: profileData.phone,
+          organization: profileData.organization,
+        })
+      
+      if (dbError) console.error('Error updating user record:', dbError)
+      
+      return { data, error: null }
     } catch (error) {
-      console.error('Error creating anonymous user:', error)
-      return null
+      console.error('Error updating profile:', error)
+      return { data: null, error }
     }
   }
 
@@ -113,6 +158,7 @@ export const AuthProvider = ({ children }) => {
     signInWithGoogle,
     signOut,
     createAnonymousUser,
+    updateProfile,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

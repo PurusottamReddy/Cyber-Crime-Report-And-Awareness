@@ -1,0 +1,140 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#334155;stop-opacity:1" />
+    </linearGradient>
+    
+    <radialGradient id="glowGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    </radialGradient>
+    
+    <linearGradient id="shieldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.9" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#bgGradient)"/>
+  
+  <!-- Abstract background patterns -->
+  <g opacity="0.3">
+    <!-- Dotted grid pattern -->
+    <pattern id="dotPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="20" cy="20" r="1" fill="#3b82f6"/>
+    </pattern>
+    <rect width="1920" height="1080" fill="url(#dotPattern)"/>
+    
+    <!-- Binary code patterns -->
+    <text x="100" y="150" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">0110 1101 1010</text>
+    <text x="300" y="250" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">1011 0100 1101</text>
+    <text x="500" y="350" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">1100 1011 0110</text>
+    <text x="700" y="450" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">0101 1100 1001</text>
+    <text x="900" y="550" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">1010 0111 0010</text>
+    <text x="1100" y="650" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">1101 1000 1111</text>
+    <text x="1300" y="750" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">0010 0101 1100</text>
+    <text x="1500" y="850" fill="#3b82f6" font-family="monospace" font-size="12" opacity="0.6">1001 1010 0111</text>
+  </g>
+  
+  <!-- Central hooded figure (hacker silhouette) -->
+  <g transform="translate(960, 540)">
+    <!-- Hood -->
+    <ellipse cx="0" cy="-80" rx="60" ry="40" fill="#1e293b" opacity="0.9"/>
+    <!-- Head -->
+    <circle cx="0" cy="-40" r="25" fill="#1e293b" opacity="0.9"/>
+    <!-- Body -->
+    <rect x="-40" y="-15" width="80" height="120" fill="#1e293b" opacity="0.9"/>
+    <!-- Arms -->
+    <rect x="-60" y="0" width="20" height="80" fill="#1e293b" opacity="0.9"/>
+    <rect x="40" y="0" width="20" height="80" fill="#1e293b" opacity="0.9"/>
+  </g>
+  
+  <!-- Left side - Threats and vulnerabilities -->
+  <g transform="translate(200, 200)">
+    <!-- Phishing hook with envelope -->
+    <g opacity="0.9">
+      <path d="M0,0 Q20,-20 40,0 L40,20 Q20,40 0,20 Z" fill="#ef4444" stroke="#dc2626" stroke-width="2"/>
+      <path d="M10,10 L30,10 M10,15 L30,15 M10,20 L25,20" stroke="#ffffff" stroke-width="1"/>
+      <path d="M40,0 L60,-10 L60,10 L40,0" fill="#ef4444"/>
+      <line x1="60" y1="-10" x2="80" y2="-15" stroke="#ef4444" stroke-width="3"/>
+    </g>
+  </g>
+  
+  <g transform="translate(150, 350)">
+    <!-- Password field -->
+    <rect x="0" y="0" width="60" height="30" fill="#1e293b" stroke="#3b82f6" stroke-width="2" rx="4"/>
+    <text x="30" y="20" text-anchor="middle" fill="#3b82f6" font-family="monospace" font-size="12">••••</text>
+  </g>
+  
+  <g transform="translate(100, 500)">
+    <!-- User profiles -->
+    <circle cx="15" cy="15" r="10" fill="#3b82f6" opacity="0.7"/>
+    <circle cx="15" cy="15" r="6" fill="#ffffff"/>
+    <rect x="10" y="25" width="10" height="15" fill="#3b82f6" opacity="0.7"/>
+    <line x1="5" y1="40" x2="25" y2="40" stroke="#3b82f6" stroke-width="2" opacity="0.7"/>
+    
+    <circle cx="45" cy="15" r="10" fill="#3b82f6" opacity="0.7"/>
+    <circle cx="45" cy="15" r="6" fill="#ffffff"/>
+    <rect x="40" y="25" width="10" height="15" fill="#3b82f6" opacity="0.7"/>
+    <line x1="35" y1="40" x2="55" y2="40" stroke="#3b82f6" stroke-width="2" opacity="0.7"/>
+  </g>
+  
+  <g transform="translate(120, 700)">
+    <!-- Laptop with warning -->
+    <rect x="0" y="0" width="80" height="50" fill="#1e293b" stroke="#3b82f6" stroke-width="2" rx="4"/>
+    <rect x="10" y="10" width="60" height="30" fill="#0f172a"/>
+    <polygon points="20,25 25,20 30,25 25,30" fill="#ef4444"/>
+    <text x="25" y="35" text-anchor="middle" fill="#ef4444" font-size="8" font-weight="bold">!</text>
+  </g>
+  
+  <!-- Right side - Global reach and threats -->
+  <g transform="translate(1600, 200)">
+    <!-- Globe -->
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#3b82f6" stroke-width="2"/>
+    <circle cx="0" cy="0" r="30" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.7"/>
+    <circle cx="0" cy="0" r="20" fill="none" stroke="#3b82f6" stroke-width="1" opacity="0.5"/>
+    <line x1="-40" y1="0" x2="40" y2="0" stroke="#3b82f6" stroke-width="1" opacity="0.7"/>
+    <line x1="0" y1="-40" x2="0" y2="40" stroke="#3b82f6" stroke-width="1" opacity="0.7"/>
+  </g>
+  
+  <g transform="translate(1650, 350)">
+    <!-- Red padlock -->
+    <rect x="0" y="0" width="40" height="50" fill="#ef4444" stroke="#dc2626" stroke-width="2" rx="4"/>
+    <rect x="5" y="10" width="30" height="25" fill="#dc2626"/>
+    <circle cx="20" cy="22" r="8" fill="#dc2626" stroke="#ffffff" stroke-width="1"/>
+    <rect x="15" y="30" width="10" height="20" fill="#ef4444"/>
+  </g>
+  
+  <g transform="translate(1680, 500)">
+    <!-- Credit card -->
+    <rect x="0" y="0" width="60" height="40" fill="#1e293b" stroke="#3b82f6" stroke-width="2" rx="4"/>
+    <rect x="10" y="10" width="40" height="8" fill="#3b82f6"/>
+    <text x="15" y="25" fill="#ffffff" font-family="monospace" font-size="8">**** **** **** 1234</text>
+    <text x="15" y="35" fill="#ffffff" font-family="monospace" font-size="6">12/25</text>
+    <circle cx="45" cy="30" r="8" fill="#3b82f6" opacity="0.7"/>
+  </g>
+  
+  <!-- Bottom center - Security shield -->
+  <g transform="translate(960, 900)">
+    <!-- Shield -->
+    <path d="M0,-60 L-40,-20 L-40,20 L0,60 L40,20 L40,-20 Z" fill="url(#shieldGradient)" stroke="#ffffff" stroke-width="3"/>
+    <circle cx="0" cy="0" r="15" fill="#ffffff"/>
+    <path d="M-8,0 L-3,5 L8,-6" stroke="#3b82f6" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- Glow effects -->
+  <circle cx="960" cy="540" r="300" fill="url(#glowGradient)" opacity="0.5"/>
+  <circle cx="960" cy="900" r="100" fill="url(#glowGradient)" opacity="0.6"/>
+  
+  <!-- Additional abstract elements -->
+  <g opacity="0.4">
+    <circle cx="200" cy="300" r="50" fill="none" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="1700" cy="400" r="60" fill="none" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="300" cy="800" r="40" fill="none" stroke="#3b82f6" stroke-width="1"/>
+    <circle cx="1600" cy="700" r="45" fill="none" stroke="#3b82f6" stroke-width="1"/>
+  </g>
+</svg>

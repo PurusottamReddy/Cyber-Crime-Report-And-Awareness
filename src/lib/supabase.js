@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    providers: ['google'],
-    redirectTo: `${window.location.origin}/auth/callback`
+    persistSession: true,
+    autoRefreshToken: true,
   }
 })

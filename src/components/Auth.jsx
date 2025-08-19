@@ -17,7 +17,7 @@ const Auth = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
       </div>
     )
@@ -60,37 +60,37 @@ const Auth = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="flex justify-center">
-          <Shield className="h-12 w-12 text-blue-600" />
+          <Shield className="h-12 w-12 text-blue-600 dark:text-blue-400" />
         </div>
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900 dark:text-white">
           {isSignUp ? 'Create your account' : 'Sign in to CyberGuard'}
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
+        <p className="mt-2 text-center text-sm text-gray-600 dark:text-gray-300">
           Help protect the community from cybercrime
         </p>
       </div>
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white dark:bg-gray-800 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="mb-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             </div>
           )}
 
           {message && (
-            <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md">
-              <p className="text-sm text-green-600">{message}</p>
+            <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+              <p className="text-sm text-green-600 dark:text-green-400">{message}</p>
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
             {isSignUp && (
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Full Name
                 </label>
                 <div className="mt-1 relative">
@@ -101,16 +101,18 @@ const Auth = () => {
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                     placeholder="Enter your full name"
                   />
-                  <User className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <User className="h-5 w-5 text-gray-400" />
+                  </div>
                 </div>
               </div>
             )}
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email address
               </label>
               <div className="mt-1 relative">
@@ -118,18 +120,21 @@ const Auth = () => {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder="Enter your email"
                 />
-                <Mail className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <Mail className="h-5 w-5 text-gray-400" />
+                </div>
               </div>
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
               <div className="mt-1 relative">
@@ -137,13 +142,16 @@ const Auth = () => {
                   id="password"
                   name="password"
                   type="password"
+                  autoComplete="current-password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none block w-full px-3 py-2 pl-10 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                   placeholder="Enter your password"
                 />
-                <Lock className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <Lock className="h-5 w-5 text-gray-400" />
+                </div>
               </div>
             </div>
 
@@ -153,11 +161,7 @@ const Auth = () => {
                 disabled={authLoading}
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {authLoading ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                ) : (
-                  isSignUp ? 'Sign up' : 'Sign in'
-                )}
+                {authLoading ? 'Loading...' : (isSignUp ? 'Create Account' : 'Sign In')}
               </button>
             </div>
           </form>
@@ -165,10 +169,10 @@ const Auth = () => {
           <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+                <div className="w-full border-t border-gray-300 dark:border-gray-600" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Or continue with</span>
+                <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400">Or continue with</span>
               </div>
             </div>
 
@@ -176,18 +180,19 @@ const Auth = () => {
               <button
                 onClick={handleGoogleSignIn}
                 disabled={authLoading}
-                className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-2 px-4 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <Chrome className="h-5 w-5 text-red-500" />
-                <span className="ml-2">Sign in with Google</span>
+                <Chrome className="h-5 w-5 mr-2" />
+                Google
               </button>
             </div>
           </div>
 
           <div className="mt-6 text-center">
             <button
+              type="button"
               onClick={() => setIsSignUp(!isSignUp)}
-              className="text-sm text-blue-600 hover:text-blue-500"
+              className="text-blue-600 dark:text-blue-400 hover:text-blue-500 dark:hover:text-blue-300 text-sm font-medium"
             >
               {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
             </button>

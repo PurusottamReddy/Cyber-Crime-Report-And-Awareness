@@ -64,30 +64,30 @@ const FraudLookup = () => {
   }
 
   const categoryColors = {
-    fraud: 'bg-red-100 text-red-800',
-    phishing: 'bg-orange-100 text-orange-800',
-    harassment: 'bg-purple-100 text-purple-800',
-    deepfake: 'bg-pink-100 text-pink-800',
+    fraud: 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400',
+    phishing: 'bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-400',
+    harassment: 'bg-purple-100 dark:bg-purple-900/20 text-purple-800 dark:text-purple-400',
+    deepfake: 'bg-pink-100 dark:bg-pink-900/20 text-pink-800 dark:text-pink-400',
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <Search className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Fraud Lookup Tool</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <Search className="h-12 w-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Fraud Lookup Tool</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Check if an email, phone number, or website has been previously reported for cybercrime
           </p>
         </div>
 
         {/* Search Form */}
-        <div className="bg-white rounded-lg shadow-md p-8 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8 mb-8">
           <form onSubmit={handleSearch} className="space-y-6">
             {/* Search Type Selection */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-3">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                 What would you like to search for?
               </label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -98,10 +98,10 @@ const FraudLookup = () => {
                 ].map((option) => (
                   <label
                     key={option.value}
-                    className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
+                    className={`relative flex cursor-pointer rounded-lg border p-4 focus:outline-none ${
                       searchType === option.value
-                        ? 'border-blue-500 bg-blue-50 text-blue-700'
-                        : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700'
                     }`}
                   >
                     <input
@@ -112,8 +112,27 @@ const FraudLookup = () => {
                       onChange={(e) => setSearchType(e.target.value)}
                       className="sr-only"
                     />
-                    <span className="text-2xl mr-3">{option.icon}</span>
-                    <span className="font-medium">{option.label}</span>
+                    <div className="flex w-full items-center justify-between">
+                      <div className="flex items-center">
+                        <div className="text-sm">
+                          <div className="flex items-center">
+                            <span className="text-2xl mr-3">{option.icon}</span>
+                            <span className={`font-medium ${
+                              searchType === option.value
+                                ? 'text-blue-900 dark:text-blue-100'
+                                : 'text-gray-900 dark:text-white'
+                            }`}>
+                              {option.label}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      {searchType === option.value && (
+                        <div className="shrink-0 text-blue-600 dark:text-blue-400">
+                          <CheckCircle className="h-6 w-6" />
+                        </div>
+                      )}
+                    </div>
                   </label>
                 ))}
               </div>
@@ -121,20 +140,19 @@ const FraudLookup = () => {
 
             {/* Search Input */}
             <div>
-              <label htmlFor="search" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="search" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 Search Query
               </label>
               <div className="relative">
                 <input
-                  id="search"
                   type="text"
+                  id="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={getSearchPlaceholder()}
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  required
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 />
-                <Search className="h-5 w-5 text-gray-400 absolute right-4 top-1/2 transform -translate-y-1/2" />
+                <Search className="h-5 w-5 text-gray-400 absolute left-3 top-3.5" />
               </div>
             </div>
 
@@ -142,13 +160,8 @@ const FraudLookup = () => {
             <button
               type="submit"
               disabled={loading || !searchQuery.trim()}
-              className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-lg shadow-sm text-base font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 dark:disabled:bg-gray-600 text-white py-3 px-6 rounded-lg font-medium transition-colors disabled:cursor-not-allowed"
             >
-              {loading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-              ) : (
-                <Search className="h-5 w-5 mr-2" />
-              )}
               {loading ? 'Searching...' : 'Search Database'}
             </button>
           </form>
@@ -156,92 +169,62 @@ const FraudLookup = () => {
 
         {/* Results */}
         {searched && (
-          <div className="bg-white rounded-lg shadow-md p-8">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-8">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+              Search Results
+            </h2>
+
             {loading ? (
               <div className="text-center py-8">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-                <p className="text-gray-600">Searching our database...</p>
+                <p className="text-gray-600 dark:text-gray-300">Searching database...</p>
               </div>
-            ) : results.length > 0 ? (
-              <div>
-                <div className="flex items-center mb-6">
-                  <AlertTriangle className="h-6 w-6 text-red-600 mr-2" />
-                  <h2 className="text-xl font-semibold text-red-600">
-                    ⚠️ Found {results.length} report(s) for "{searchQuery}"
-                  </h2>
-                </div>
-                
-                <div className="space-y-4">
-                  {results.map((result) => (
-                    <div
-                      key={result.id}
-                      className="border border-red-200 rounded-lg p-6 bg-red-50"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-lg font-semibold text-gray-900">
-                            {result.reports?.title}
-                          </h3>
-                          <div className="flex items-center space-x-3 mt-2">
-                            <span
-                              className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                categoryColors[result.reports?.category]
-                              }`}
-                            >
-                              {result.reports?.category?.toUpperCase()}
-                            </span>
-                            <span className="text-sm text-gray-500">
-                              Reported: {formatDate(result.created_at)}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-sm text-gray-500">Reference ID</p>
-                          <p className="font-mono text-sm">{result.reports?.reference_id}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="bg-white rounded p-4 border border-red-200">
-                        <p className="text-sm font-medium text-gray-700 mb-1">Reported Entity:</p>
-                        <p className="text-sm text-gray-900 font-mono bg-gray-100 p-2 rounded">
-                          {result.entity_value}
-                        </p>
-                      </div>
-
-                      {result.reports?.location && (
-                        <div className="mt-3">
-                          <p className="text-sm text-gray-600">
-                            📍 Location: {result.reports.location}
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                
-                <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <h3 className="font-semibold text-yellow-800 mb-2">⚠️ Security Recommendation</h3>
-                  <p className="text-sm text-yellow-700">
-                    This {searchType} has been reported for cybercrime activities. Exercise extreme caution 
-                    and avoid sharing personal information, making payments, or clicking on links from this source.
-                  </p>
-                </div>
+            ) : results.length === 0 ? (
+              <div className="text-center py-8">
+                <CheckCircle className="h-12 w-12 text-green-600 dark:text-green-400 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">No reports found</h3>
+                <p className="text-gray-600 dark:text-gray-300">
+                  This {searchType} has not been reported in our database.
+                </p>
               </div>
             ) : (
-              <div className="text-center py-8">
-                <CheckCircle className="h-12 w-12 text-green-500 mx-auto mb-4" />
-                <h2 className="text-xl font-semibold text-green-600 mb-2">
-                  ✅ No Reports Found
-                </h2>
-                <p className="text-gray-600 mb-4">
-                  "{searchQuery}" has not been reported in our database.
-                </p>
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <p className="text-sm text-green-700">
-                    While this {searchType} hasn't been reported yet, always remain vigilant and trust your instincts. 
-                    If something seems suspicious, it's better to be cautious.
-                  </p>
+              <div className="space-y-6">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
+                  <div className="flex items-center">
+                    <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400 mr-2" />
+                    <span className="text-yellow-800 dark:text-yellow-200 font-medium">
+                      Found {results.length} report{results.length > 1 ? 's' : ''} for this {searchType}
+                    </span>
+                  </div>
                 </div>
+
+                {results.map((result) => (
+                  <div key={result.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6">
+                    <div className="flex items-start justify-between mb-4">
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                          {result.reports?.title || 'Report Details'}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm">
+                          <span className="font-medium">Entity:</span> {result.entity_value}
+                        </p>
+                      </div>
+                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${categoryColors[result.reports?.category] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'}`}>
+                        {result.reports?.category || 'Unknown'}
+                      </span>
+                    </div>
+
+                    <div className="space-y-2 text-sm text-gray-600 dark:text-gray-300">
+                      <p><span className="font-medium">Reported:</span> {formatDate(result.created_at)}</p>
+                      {result.reports?.location && (
+                        <p><span className="font-medium">Location:</span> {result.reports.location}</p>
+                      )}
+                      {result.reports?.reference_id && (
+                        <p><span className="font-medium">Reference ID:</span> {result.reports.reference_id}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

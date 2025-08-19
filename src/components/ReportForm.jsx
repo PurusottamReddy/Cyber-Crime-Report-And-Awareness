@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext.jsx'
 import { supabase } from '../lib/supabase.js'
 
 const ReportForm = () => {
-  const { user, createAnonymousUser } = useAuth()
+  const { user } = useAuth()
   const [formData, setFormData] = useState({
     category: 'fraud',
     title: '',
@@ -94,12 +94,9 @@ const ReportForm = () => {
     try {
       let userId = user?.id || null
 
-      // Create anonymous user if needed
+      // Anonymous report: proceed with null user_id (no user record created)
       if (!user && isAnonymous) {
-        userId = await createAnonymousUser()
-        if (!userId) {
-          throw new Error('Failed to create anonymous user')
-        }
+        userId = null
       } else if (!user && !isAnonymous) {
         throw new Error('Please sign in or choose anonymous reporting')
       }
@@ -209,223 +206,255 @@ const ReportForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-8">
-          <div className="flex items-center mb-8">
-            <AlertTriangle className="h-8 w-8 text-red-600 mr-3" />
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">Report Cybercrime</h1>
-              <p className="text-gray-600 mt-1">Help protect the community by reporting suspicious activities</p>
-            </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          <AlertTriangle className="h-12 w-12 text-red-600 dark:text-red-400 mx-auto mb-4" />
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+            Report Cybercrime
+          </h1>
+          <p className="text-lg text-gray-600 dark:text-gray-300">
+            Help protect others by reporting suspicious activities and cyber threats
+          </p>
+        </div>
+
+        {success ? (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 text-center">
+            <CheckCircle className="h-16 w-16 text-green-600 dark:text-green-400 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Report Submitted Successfully!
+            </h2>
+            <p className="text-gray-600 dark:text-gray-300 mb-4">
+              Thank you for helping to protect the community. Your report has been received and will be reviewed.
+            </p>
+            {referenceId && (
+              <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
+                <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Reference ID:</p>
+                <p className="font-mono text-lg font-bold text-gray-900 dark:text-white">{referenceId}</p>
+              </div>
+            )}
+            <button
+              onClick={() => {
+                setSuccess(false)
+                setFormData({
+                  category: 'fraud',
+                  title: '',
+                  description: '',
+                  location: '',
+                  incidentDate: '',
+                  lookupEntities: [],
+                })
+                setFile(null)
+                setReferenceId('')
+              }}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium"
+            >
+              Submit Another Report
+            </button>
           </div>
-
-          {error && (
-            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-md">
-              <p className="text-sm text-red-600">{error}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Anonymous Option */}
-            {!user && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
-                <label className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={isAnonymous}
-                    onChange={(e) => setIsAnonymous(e.target.checked)}
-                    className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-yellow-800">
-                    Report anonymously (you won't be able to track your report)
-                  </span>
-                </label>
+        ) : (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
+            {error && (
+              <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                <p className="text-red-600 dark:text-red-400">{error}</p>
               </div>
             )}
 
-            {/* Category */}
-            <div>
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 mb-1">
-                Category *
-              </label>
-              <select
-                id="category"
-                name="category"
-                value={formData.category}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                {categories.map(cat => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Anonymous Report Option */}
+              {!user && (
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="anonymous"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
+                    className="rounded border-gray-300 dark:border-gray-600 text-blue-600 focus:ring-blue-500 bg-white dark:bg-gray-700"
+                  />
+                  <label htmlFor="anonymous" className="ml-2 text-sm text-gray-700 dark:text-gray-300">
+                    Submit anonymously (no account required)
+                  </label>
+                </div>
+              )}
 
-            {/* Title */}
-            <div>
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 mb-1">
-                Title *
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                required
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Brief description of the incident"
-              />
-            </div>
-
-            {/* Description */}
-            <div>
-              <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-                Description *
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                value={formData.description}
-                onChange={handleInputChange}
-                required
-                rows={5}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="Detailed description of what happened..."
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Location */}
+              {/* Category */}
               <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-1">
-                  <MapPin className="h-4 w-4 inline mr-1" />
-                  Location
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Category *
+                </label>
+                <select
+                  name="category"
+                  value={formData.category}
+                  onChange={handleInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                >
+                  {categories.map((category) => (
+                    <option key={category.value} value={category.value}>
+                      {category.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Title */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Title *
                 </label>
                 <input
                   type="text"
-                  id="location"
-                  name="location"
-                  value={formData.location}
+                  name="title"
+                  value={formData.title}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="City, State, Country"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Brief description of the incident"
                 />
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Description *
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleInputChange}
+                  required
+                  rows={4}
+                  className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  placeholder="Provide detailed information about the incident..."
+                />
+              </div>
+
+              {/* Location */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Location
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleInputChange}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    placeholder="Where did this incident occur?"
+                  />
+                  <MapPin className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                </div>
               </div>
 
               {/* Incident Date */}
               <div>
-                <label htmlFor="incidentDate" className="block text-sm font-medium text-gray-700 mb-1">
-                  <Calendar className="h-4 w-4 inline mr-1" />
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Incident Date
                 </label>
-                <input
-                  type="date"
-                  id="incidentDate"
-                  name="incidentDate"
-                  value={formData.incidentDate}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                <div className="relative">
+                  <input
+                    type="date"
+                    name="incidentDate"
+                    value={formData.incidentDate}
+                    onChange={handleInputChange}
+                    className="w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                  <Calendar className="h-5 w-5 text-gray-400 absolute left-3 top-2.5" />
+                </div>
               </div>
-            </div>
 
-            {/* Fraud Lookup Entities */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Related Emails/Phones/Websites
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Add any emails, phone numbers, or websites involved in this incident
-              </p>
-              <div className="flex gap-2 mb-2">
-                <select
-                  value={entityInput.type}
-                  onChange={(e) => setEntityInput(prev => ({ ...prev, type: e.target.value }))}
-                  className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="email">Email</option>
-                  <option value="phone">Phone</option>
-                  <option value="website">Website</option>
-                </select>
-                <input
-                  type="text"
-                  value={entityInput.value}
-                  onChange={(e) => setEntityInput(prev => ({ ...prev, value: e.target.value }))}
-                  placeholder="Enter value..."
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <button
-                  type="button"
-                  onClick={addLookupEntity}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
-                >
-                  Add
-                </button>
-              </div>
-              {formData.lookupEntities.length > 0 && (
-                <div className="space-y-1">
+              {/* Lookup Entities */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Related Entities (emails, phone numbers, websites)
+                </label>
+                <div className="space-y-2">
                   {formData.lookupEntities.map((entity, index) => (
-                    <div key={index} className="flex items-center justify-between bg-gray-50 p-2 rounded">
-                      <span className="text-sm">
-                        <span className="font-medium capitalize">{entity.type}:</span> {entity.value}
-                      </span>
+                    <div key={index} className="flex items-center space-x-2">
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{entity.type}:</span>
+                      <span className="text-sm font-medium text-gray-900 dark:text-white">{entity.value}</span>
                       <button
                         type="button"
                         onClick={() => removeLookupEntity(index)}
-                        className="text-red-600 hover:text-red-800 text-sm"
+                        className="text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 text-sm"
                       >
                         Remove
                       </button>
                     </div>
                   ))}
+                  <div className="flex space-x-2">
+                    <select
+                      value={entityInput.type}
+                      onChange={(e) => setEntityInput({ ...entityInput, type: e.target.value })}
+                      className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    >
+                      <option value="email">Email</option>
+                      <option value="phone">Phone</option>
+                      <option value="website">Website</option>
+                    </select>
+                    <input
+                      type="text"
+                      value={entityInput.value}
+                      onChange={(e) => setEntityInput({ ...entityInput, value: e.target.value })}
+                      className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      placeholder="Enter entity value"
+                    />
+                    <button
+                      type="button"
+                      onClick={addLookupEntity}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium"
+                    >
+                      Add
+                    </button>
+                  </div>
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* File Upload */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Upload className="h-4 w-4 inline mr-1" />
-                Evidence File
-              </label>
-              <p className="text-xs text-gray-500 mb-2">
-                Upload images, documents, or videos as evidence (max 10MB)
-              </p>
-              <input
-                type="file"
-                onChange={handleFileChange}
-                accept="image/*,video/*,application/pdf,.doc,.docx"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              {file && (
-                <p className="text-sm text-green-600 mt-1">
-                  File selected: {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                </p>
-              )}
-            </div>
+              {/* File Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Evidence (optional)
+                </label>
+                <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                  <Upload className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                    Upload screenshots, documents, or other evidence (max 10MB)
+                  </p>
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    accept="image/*,.pdf,.doc,.docx"
+                    className="hidden"
+                    id="file-upload"
+                  />
+                  <label
+                    htmlFor="file-upload"
+                    className="cursor-pointer bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md font-medium"
+                  >
+                    Choose File
+                  </label>
+                  {file && (
+                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                      Selected: {file.name}
+                    </p>
+                  )}
+                </div>
+              </div>
 
-            {/* Submit Button */}
-            <div className="pt-6">
-              <button
-                type="submit"
-                disabled={loading || (!user && !isAnonymous)}
-                className="w-full flex items-center justify-center px-6 py-3 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {loading ? (
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                ) : (
-                  <FileText className="h-5 w-5 mr-2" />
-                )}
-                {loading ? 'Submitting Report...' : 'Submit Report'}
-              </button>
-            </div>
-          </form>
-        </div>
+              {/* Submit Button */}
+              <div className="pt-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-red-600 hover:bg-red-700 text-white py-3 px-6 rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? 'Submitting...' : 'Submit Report'}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   )
